@@ -83,17 +83,19 @@ const Products = () => {
                   <button
                     key={garment.value}
                     onClick={() => setSelectedGarment(garment.value)}
-                    className={`p-6 rounded-xl border-2 transition-all text-left ${
+                    className={`group p-6 rounded-xl border-2 transition-all text-left ${
                       selectedGarment === garment.value
                         ? "border-accent bg-accent/10 shadow-md"
-                        : "border-border hover:border-accent/50 bg-card"
+                        : "border-border hover:border-accent/50 hover:shadow-lg bg-card"
                     }`}
                   >
-                    <img 
-                      src={garment.image} 
-                      alt={garment.label} 
-                      className="w-full h-32 object-contain mb-3"
-                    />
+                    <div className="overflow-hidden rounded-lg mb-3">
+                      <img 
+                        src={garment.image} 
+                        alt={garment.label} 
+                        className="w-full h-32 object-contain transition-transform duration-300 group-hover:scale-110"
+                      />
+                    </div>
                     <h3 className="font-semibold text-foreground">{garment.label}</h3>
                     <p className="text-sm text-muted-foreground">From ${garment.price}</p>
                   </button>
