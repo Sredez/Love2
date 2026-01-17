@@ -5,13 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Check, Pencil } from "lucide-react";
 
+import tshirtImg from "@/assets/products/tshirt.jpg";
+import hoodieImg from "@/assets/products/hoodie.jpg";
+import poloImg from "@/assets/products/polo.jpg";
+import tankImg from "@/assets/products/tank.jpg";
+import longsleeveImg from "@/assets/products/longsleeve.jpg";
+import sweatshirtImg from "@/assets/products/sweatshirt.jpg";
+
 const garmentTypes = [
-  { value: "tshirt", label: "T-Shirt", price: 19.99, image: "👕" },
-  { value: "hoodie", label: "Hoodie", price: 39.99, image: "🧥" },
-  { value: "polo", label: "Polo Shirt", price: 29.99, image: "👔" },
-  { value: "tank", label: "Tank Top", price: 17.99, image: "🎽" },
-  { value: "longsleeve", label: "Long Sleeve", price: 24.99, image: "👕" },
-  { value: "sweatshirt", label: "Sweatshirt", price: 34.99, image: "🧥" },
+  { value: "tshirt", label: "T-Shirt", price: 19.99, image: tshirtImg },
+  { value: "hoodie", label: "Hoodie", price: 39.99, image: hoodieImg },
+  { value: "polo", label: "Polo Shirt", price: 29.99, image: poloImg },
+  { value: "tank", label: "Tank Top", price: 17.99, image: tankImg },
+  { value: "longsleeve", label: "Long Sleeve", price: 24.99, image: longsleeveImg },
+  { value: "sweatshirt", label: "Sweatshirt", price: 34.99, image: sweatshirtImg },
 ];
 
 const colors = [
@@ -82,7 +89,11 @@ const Products = () => {
                         : "border-border hover:border-accent/50 bg-card"
                     }`}
                   >
-                    <div className="text-4xl mb-3">{garment.image}</div>
+                    <img 
+                      src={garment.image} 
+                      alt={garment.label} 
+                      className="w-full h-32 object-contain mb-3"
+                    />
                     <h3 className="font-semibold text-foreground">{garment.label}</h3>
                     <p className="text-sm text-muted-foreground">From ${garment.price}</p>
                   </button>
