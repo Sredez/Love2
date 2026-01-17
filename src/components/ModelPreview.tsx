@@ -34,14 +34,15 @@ const modelImages: Record<string, string> = {
   "hispanic-female": femaleCaucasianTshirt, // Fallback
 };
 
-// Shirt area masks for color overlay (covers the entire shirt)
+// Shirt area masks for color overlay - adjusted to avoid head/neck area
+// These polygons start below the neckline to prevent color bleeding onto skin
 const shirtMasks: Record<string, string> = {
-  tshirt: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
-  hoodie: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
-  polo: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
-  tank: "polygon(30% 18%, 70% 18%, 75% 22%, 85% 40%, 80% 100%, 20% 100%, 15% 40%, 25% 22%)",
-  longsleeve: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
-  sweatshirt: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
+  tshirt: "polygon(18% 28%, 40% 24%, 50% 23%, 60% 24%, 82% 28%, 88% 35%, 92% 50%, 88% 100%, 12% 100%, 8% 50%, 12% 35%)",
+  hoodie: "polygon(15% 26%, 38% 22%, 50% 20%, 62% 22%, 85% 26%, 92% 35%, 95% 55%, 90% 100%, 10% 100%, 5% 55%, 8% 35%)",
+  polo: "polygon(20% 28%, 40% 25%, 50% 24%, 60% 25%, 80% 28%, 86% 35%, 90% 50%, 86% 100%, 14% 100%, 10% 50%, 14% 35%)",
+  tank: "polygon(28% 26%, 42% 24%, 50% 23%, 58% 24%, 72% 26%, 78% 35%, 82% 50%, 78% 100%, 22% 100%, 18% 50%, 22% 35%)",
+  longsleeve: "polygon(5% 30%, 38% 24%, 50% 23%, 62% 24%, 95% 30%, 100% 40%, 100% 100%, 0% 100%, 0% 40%)",
+  sweatshirt: "polygon(10% 28%, 38% 22%, 50% 20%, 62% 22%, 90% 28%, 95% 38%, 95% 100%, 5% 100%, 5% 38%)",
 };
 
 // Print area positions for different garment types (as percentages)
