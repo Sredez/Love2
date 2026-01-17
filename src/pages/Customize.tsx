@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ModelPreview from "@/components/ModelPreview";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -109,51 +110,23 @@ const Customize = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {/* Preview Area */}
             <div className="space-y-6 animate-slide-up">
-              <div
-                className="relative aspect-square rounded-2xl overflow-hidden shadow-xl"
-                style={{ backgroundColor: selectedColor?.hex }}
-              >
-                {/* Garment Preview */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative w-3/4 h-3/4 flex items-center justify-center">
-                    {/* Placeholder garment shape */}
-                    <div className="text-center">
-                      <p className="text-lg font-medium opacity-60" style={{ color: color === "white" ? "#333" : "#fff" }}>
-                        {garmentTypes.find((g) => g.value === garmentType)?.label}
-                      </p>
-                      <p className="text-sm opacity-40" style={{ color: color === "white" ? "#333" : "#fff" }}>
-                        {genders.find((g) => g.value === gender)?.label} • Size {size.toUpperCase()}
-                      </p>
-                    </div>
-
-                    {/* Print area with uploaded image */}
-                    <div
-                      className="absolute top-1/4 left-1/2 -translate-x-1/2 w-1/2 aspect-square border-2 border-dashed rounded-lg flex items-center justify-center overflow-hidden"
-                      style={{ borderColor: color === "white" ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.3)" }}
-                    >
-                      {uploadedImage ? (
-                        <img
-                          src={uploadedImage}
-                          alt="Your design"
-                          className="w-full h-full object-contain"
-                        />
-                      ) : (
-                        <span
-                          className="text-xs text-center px-2"
-                          style={{ color: color === "white" ? "rgba(0,0,0,0.3)" : "rgba(255,255,255,0.4)" }}
-                        >
-                          Print Area
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
+              {/* Live Model Preview */}
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
+                <ModelPreview
+                  garmentType={garmentType}
+                  color={color}
+                  colorHex={selectedColor?.hex || "#FFFFFF"}
+                  size={size}
+                  gender={gender}
+                  modelType={modelType}
+                  uploadedImage={uploadedImage}
+                />
               </div>
 
-              {/* Model Preview Toggle */}
+              {/* Model Selection */}
               <div className="bg-card rounded-xl p-6 shadow-md">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-foreground">Preview on Model</h3>
+                  <h3 className="font-semibold text-foreground">Choose Model</h3>
                   <Select value={modelType} onValueChange={setModelType}>
                     <SelectTrigger className="w-48">
                       <SelectValue />
@@ -168,7 +141,7 @@ const Customize = () => {
                   </Select>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Select a model type to preview how your design will look when worn.
+                  Preview updates live as you change options above.
                 </p>
               </div>
             </div>
