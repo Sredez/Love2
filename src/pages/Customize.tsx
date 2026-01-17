@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/select";
 import { Upload, Image, RotateCcw, ShoppingCart, Sparkles, ZoomIn, Move, RotateCw, Maximize2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
-import { useCart } from "@/contexts/CartContext";
 
 // Import model thumbnails
 import femaleAsianTshirt from "@/assets/models/female-asian-tshirt.jpg";
@@ -107,8 +106,6 @@ const Customize = () => {
   const [designOffsetX, setDesignOffsetX] = useState(0);
   const [designOffsetY, setDesignOffsetY] = useState(0);
   const [designRotation, setDesignRotation] = useState(0);
-
-  const { addToCart } = useCart();
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -530,14 +527,14 @@ const Customize = () => {
                     <p className="text-sm font-medium text-accent">FREE over $50</p>
                   </div>
                 </div>
-                <Button 
+                  <Button 
                   variant="hero" 
                   size="xl" 
                   className="w-full"
                   disabled={isAddingToCart}
                   onClick={async () => {
                     setIsAddingToCart(true);
-                    await addToCart({
+                    console.log("Add to cart:", {
                       garment_type: garmentType,
                       color,
                       size,
