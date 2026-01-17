@@ -1,14 +1,12 @@
 import { useMemo } from "react";
 
-// Import all model images
-import maleCaucasian from "@/assets/models/male-caucasian.jpg";
-import femaleCaucasian from "@/assets/models/female-caucasian.jpg";
-import maleAfrican from "@/assets/models/male-african.jpg";
-import femaleAfrican from "@/assets/models/female-african.jpg";
-import maleAsian from "@/assets/models/male-asian.jpg";
-import femaleAsian from "@/assets/models/female-asian.jpg";
-import maleHispanic from "@/assets/models/male-hispanic.jpg";
-import femaleHispanic from "@/assets/models/female-hispanic.jpg";
+// Import model images (full body with visible t-shirt)
+import femaleAsianTshirt from "@/assets/models/female-asian-tshirt.jpg";
+import maleCaucasianTshirt from "@/assets/models/male-caucasian-tshirt.jpg";
+import femaleCaucasianTshirt from "@/assets/models/female-caucasian-tshirt.jpg";
+import maleAfricanTshirt from "@/assets/models/male-african-tshirt.jpg";
+import femaleAfricanTshirt from "@/assets/models/female-african-tshirt.jpg";
+import maleAsianTshirt from "@/assets/models/male-asian-tshirt.jpg";
 
 interface ModelPreviewProps {
   garmentType: string;
@@ -24,26 +22,36 @@ interface ModelPreviewProps {
   designRotation?: number;
 }
 
-// Model images mapping
+// Model images mapping - using new full-body shots
 const modelImages: Record<string, string> = {
-  "caucasian-male": maleCaucasian,
-  "caucasian-female": femaleCaucasian,
-  "african-male": maleAfrican,
-  "african-female": femaleAfrican,
-  "asian-male": maleAsian,
-  "asian-female": femaleAsian,
-  "hispanic-male": maleHispanic,
-  "hispanic-female": femaleHispanic,
+  "caucasian-male": maleCaucasianTshirt,
+  "caucasian-female": femaleCaucasianTshirt,
+  "african-male": maleAfricanTshirt,
+  "african-female": femaleAfricanTshirt,
+  "asian-male": maleAsianTshirt,
+  "asian-female": femaleAsianTshirt,
+  "hispanic-male": maleCaucasianTshirt, // Fallback
+  "hispanic-female": femaleCaucasianTshirt, // Fallback
+};
+
+// Shirt area masks for color overlay (covers the entire shirt)
+const shirtMasks: Record<string, string> = {
+  tshirt: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
+  hoodie: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
+  polo: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
+  tank: "polygon(30% 18%, 70% 18%, 75% 22%, 85% 40%, 80% 100%, 20% 100%, 15% 40%, 25% 22%)",
+  longsleeve: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
+  sweatshirt: "polygon(25% 18%, 75% 18%, 85% 22%, 100% 40%, 95% 100%, 5% 100%, 0% 40%, 15% 22%)",
 };
 
 // Print area positions for different garment types (as percentages)
 const printAreas: Record<string, { top: number; left: number; width: number; height: number }> = {
-  tshirt: { top: 28, left: 32, width: 36, height: 28 },
-  hoodie: { top: 30, left: 30, width: 40, height: 30 },
-  polo: { top: 30, left: 33, width: 34, height: 26 },
-  tank: { top: 26, left: 34, width: 32, height: 28 },
-  longsleeve: { top: 28, left: 32, width: 36, height: 28 },
-  sweatshirt: { top: 30, left: 30, width: 40, height: 30 },
+  tshirt: { top: 35, left: 30, width: 40, height: 30 },
+  hoodie: { top: 38, left: 28, width: 44, height: 32 },
+  polo: { top: 36, left: 30, width: 40, height: 28 },
+  tank: { top: 34, left: 32, width: 36, height: 30 },
+  longsleeve: { top: 35, left: 30, width: 40, height: 30 },
+  sweatshirt: { top: 38, left: 28, width: 44, height: 32 },
 };
 
 const ModelPreview = ({
@@ -61,6 +69,7 @@ const ModelPreview = ({
 }: ModelPreviewProps) => {
   const modelImage = modelImages[modelType] || modelImages["caucasian-male"];
   const printArea = printAreas[garmentType] || printAreas.tshirt;
+  const shirtMask = shirtMasks[garmentType] || shirtMasks.tshirt;
   
   // Calculate size adjustments for print area
   const sizeMultiplier = useMemo(() => {
@@ -87,8 +96,8 @@ const ModelPreview = ({
   const textColor = ["white", "gray"].includes(color) ? "#333" : "#fff";
 
   return (
-    <div className="relative w-full h-full bg-gradient-to-b from-muted/20 to-muted/40 rounded-2xl overflow-hidden">
-      {/* Model Image with color overlay */}
+    <div className="relative w-full h-full bg-gradient-to-b from-muted/30 to-muted/50 rounded-2xl overflow-hidden">
+      {/* Model Image */}
       <div className="relative w-full h-full">
         <img
           src={modelImage}
@@ -96,26 +105,17 @@ const ModelPreview = ({
           className="w-full h-full object-cover object-top"
         />
         
-        {/* Color overlay on the t-shirt area - more visible approach */}
+        {/* Color overlay on the shirt - using clip-path for precise masking */}
         {color !== "white" && (
-          <>
-            {/* Primary color tint with hue-rotate technique */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `radial-gradient(ellipse 55% 45% at 50% 42%, ${colorHex}90 0%, ${colorHex}70 40%, transparent 75%)`,
-                mixBlendMode: "multiply",
-              }}
-            />
-            {/* Secondary overlay for stronger color */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `radial-gradient(ellipse 50% 40% at 50% 42%, ${colorHex}50 0%, transparent 60%)`,
-                mixBlendMode: "color",
-              }}
-            />
-          </>
+          <div
+            className="absolute inset-0 pointer-events-none transition-colors duration-300"
+            style={{
+              backgroundColor: colorHex,
+              mixBlendMode: "multiply",
+              clipPath: shirtMask,
+              opacity: 0.85,
+            }}
+          />
         )}
 
         {/* Print area with uploaded image or placeholder */}
@@ -146,14 +146,14 @@ const ModelPreview = ({
               className="w-full h-full border-2 border-dashed rounded-lg flex items-center justify-center backdrop-blur-sm"
               style={{ 
                 borderColor: `${textColor}40`,
-                backgroundColor: `${textColor}10`,
+                backgroundColor: `${textColor}08`,
               }}
             >
               <span
-                className="text-sm font-medium px-3 py-1 rounded-full"
+                className="text-sm font-medium px-3 py-1.5 rounded-full shadow-sm"
                 style={{ 
                   color: textColor,
-                  backgroundColor: `${textColor}20`,
+                  backgroundColor: `${textColor}15`,
                 }}
               >
                 Your Design Here
