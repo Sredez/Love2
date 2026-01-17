@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ModelPreview from "@/components/ModelPreview";
@@ -60,11 +61,18 @@ const modelTypes = [
 ];
 
 const Customize = () => {
+  const [searchParams] = useSearchParams();
+  
+  // Read initial values from URL params (passed from Products page)
+  const initialGarment = searchParams.get("garment") || "tshirt";
+  const initialColor = searchParams.get("color") || "white";
+  const initialGender = searchParams.get("gender") || "unisex";
+
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [garmentType, setGarmentType] = useState("tshirt");
-  const [color, setColor] = useState("white");
+  const [garmentType, setGarmentType] = useState(initialGarment);
+  const [color, setColor] = useState(initialColor);
   const [size, setSize] = useState("m");
-  const [gender, setGender] = useState("unisex");
+  const [gender, setGender] = useState(initialGender);
   const [modelType, setModelType] = useState("caucasian-male");
   const [isDragging, setIsDragging] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
