@@ -50,15 +50,16 @@ const genders = [
   { value: "unisex", label: "Unisex" },
 ];
 
-const modelTypes = [
-  { value: "caucasian-male", label: "Male - Caucasian" },
-  { value: "caucasian-female", label: "Female - Caucasian" },
-  { value: "african-male", label: "Male - African" },
-  { value: "african-female", label: "Female - African" },
-  { value: "asian-male", label: "Male - Asian" },
-  { value: "asian-female", label: "Female - Asian" },
-  { value: "hispanic-male", label: "Male - Hispanic" },
-  { value: "hispanic-female", label: "Female - Hispanic" },
+const modelGenders = [
+  { value: "male", label: "Male" },
+  { value: "female", label: "Female" },
+];
+
+const modelEthnicities = [
+  { value: "caucasian", label: "Caucasian" },
+  { value: "african", label: "African" },
+  { value: "asian", label: "Asian" },
+  { value: "hispanic", label: "Hispanic" },
 ];
 
 const Customize = () => {
@@ -74,7 +75,9 @@ const Customize = () => {
   const [color, setColor] = useState(initialColor);
   const [size, setSize] = useState("m");
   const [gender, setGender] = useState(initialGender);
-  const [modelType, setModelType] = useState("caucasian-male");
+  const [modelGender, setModelGender] = useState("male");
+  const [modelEthnicity, setModelEthnicity] = useState("caucasian");
+  const modelType = `${modelEthnicity}-${modelGender}`;
   const [isDragging, setIsDragging] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [fullscreenPreviewOpen, setFullscreenPreviewOpen] = useState(false);
@@ -158,25 +161,52 @@ const Customize = () => {
                 </Button>
               </div>
 
-              {/* Model Selection */}
-              <div className="bg-card rounded-xl p-6 shadow-md">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-foreground">Choose Model</h3>
-                  <Select value={modelType} onValueChange={setModelType}>
-                    <SelectTrigger className="w-48">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {modelTypes.map((model) => (
-                        <SelectItem key={model.value} value={model.value}>
-                          {model.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+              {/* Model Selection - Visual Buttons */}
+              <div className="bg-card rounded-xl p-6 shadow-md space-y-4">
+                <h3 className="font-semibold text-foreground">Choose Model</h3>
+                
+                {/* Model Gender Toggle */}
+                <div className="space-y-2">
+                  <label className="text-sm text-muted-foreground">Gender</label>
+                  <div className="flex gap-2">
+                    {modelGenders.map((g) => (
+                      <button
+                        key={g.value}
+                        onClick={() => setModelGender(g.value)}
+                        className={`flex-1 py-2.5 px-4 rounded-lg font-medium text-sm transition-all ${
+                          modelGender === g.value
+                            ? "bg-accent text-accent-foreground shadow-md"
+                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        }`}
+                      >
+                        {g.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Preview updates live as you change options above.
+
+                {/* Model Ethnicity Toggle */}
+                <div className="space-y-2">
+                  <label className="text-sm text-muted-foreground">Appearance</label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {modelEthnicities.map((e) => (
+                      <button
+                        key={e.value}
+                        onClick={() => setModelEthnicity(e.value)}
+                        className={`py-2 px-3 rounded-lg font-medium text-xs transition-all ${
+                          modelEthnicity === e.value
+                            ? "bg-accent text-accent-foreground shadow-md"
+                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        }`}
+                      >
+                        {e.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="text-xs text-muted-foreground pt-2">
+                  Preview updates instantly as you select options.
                 </p>
               </div>
             </div>
