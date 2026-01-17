@@ -96,14 +96,26 @@ const ModelPreview = ({
           className="w-full h-full object-cover object-top"
         />
         
-        {/* Color overlay on the t-shirt area using blend mode */}
+        {/* Color overlay on the t-shirt area - more visible approach */}
         {color !== "white" && (
-          <div
-            className="absolute inset-0 mix-blend-multiply pointer-events-none"
-            style={{
-              background: `radial-gradient(ellipse 50% 40% at 50% 45%, ${colorHex}dd 0%, transparent 70%)`,
-            }}
-          />
+          <>
+            {/* Primary color tint with hue-rotate technique */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse 55% 45% at 50% 42%, ${colorHex}90 0%, ${colorHex}70 40%, transparent 75%)`,
+                mixBlendMode: "multiply",
+              }}
+            />
+            {/* Secondary overlay for stronger color */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse 50% 40% at 50% 42%, ${colorHex}50 0%, transparent 60%)`,
+                mixBlendMode: "color",
+              }}
+            />
+          </>
         )}
 
         {/* Print area with uploaded image or placeholder */}
