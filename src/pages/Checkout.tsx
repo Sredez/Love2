@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, CreditCard, Lock, Package, CheckCircle } from "lucide-react";
@@ -30,11 +29,15 @@ const colorHexMap: Record<string, string> = {
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { items, totalPrice, clearCart, sessionId } = useCart();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
+  
+  // Placeholder items data
+  const items: any[] = [];
+  const totalPrice = 0;
+  const clearCart = () => {};
 
   const [formData, setFormData] = useState({
     email: "",
