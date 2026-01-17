@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ShoppingCart, User } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
+import CartDrawer from "@/components/CartDrawer";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,9 +44,7 @@ const Header = () => {
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" size="icon">
-            <ShoppingCart className="h-5 w-5" />
-          </Button>
+          <CartDrawer />
           <Link to="/auth">
             <Button variant="outline">
               <User className="h-4 w-4 mr-2" />
@@ -58,12 +57,15 @@ const Header = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="md:hidden flex items-center gap-2">
+          <CartDrawer />
+          <button
+            className="p-2"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
