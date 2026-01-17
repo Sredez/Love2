@@ -81,7 +81,6 @@ const Checkout = () => {
         .from("orders")
         .insert({
           user_id: user?.id || null,
-          session_id: user ? null : sessionId,
           email: formData.email,
           status: "confirmed",
           total_amount: total,
