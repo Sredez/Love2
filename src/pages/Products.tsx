@@ -3,7 +3,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Check, Pencil } from "lucide-react";
+import { Check, Pencil, Eye } from "lucide-react";
+import QuickViewModal from "@/components/QuickViewModal";
 
 import tshirtImg from "@/assets/products/tshirt.jpg";
 import hoodieImg from "@/assets/products/hoodie.jpg";
@@ -40,6 +41,8 @@ const Products = () => {
   const [selectedGarment, setSelectedGarment] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
+  const [quickViewOpen, setQuickViewOpen] = useState(false);
+  const [quickViewGarment, setQuickViewGarment] = useState<typeof garmentTypes[0] | null>(null);
 
   const isSelectionComplete = selectedGarment && selectedColor && selectedGender;
 
@@ -50,6 +53,14 @@ const Products = () => {
     if (selectedGender) params.set("gender", selectedGender);
     return `/customize?${params.toString()}`;
   };
+
+  const handleQuickView = (garment: typeof garmentTypes[0], e: React.MouseEvent) => {
+    e.stopPropagation();
+    setQuickViewGarment(garment);
+    setQuickViewOpen(true);
+  };
+
+  const selectedColorObj = colors.find(c => c.value === selectedColor) || null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -80,25 +91,35 @@ const Products = () => {
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pl-11">
                 {garmentTypes.map((garment) => (
-                  <button
+                  <div
                     key={garment.value}
-                    onClick={() => setSelectedGarment(garment.value)}
-                    className={`group p-6 rounded-xl border-2 transition-all text-left ${
+                    className={`group relative p-6 rounded-xl border-2 transition-all text-left cursor-pointer ${
                       selectedGarment === garment.value
                         ? "border-accent bg-accent/10 shadow-md"
                         : "border-border hover:border-accent/50 hover:shadow-lg bg-card"
                     }`}
+                    onClick={() => setSelectedGarment(garment.value)}
                   >
-                    <div className="overflow-hidden rounded-lg mb-3">
+                    <div className="relative overflow-hidden rounded-lg mb-3">
                       <img 
                         src={garment.image} 
                         alt={garment.label} 
                         className="w-full h-32 object-contain transition-transform duration-300 group-hover:scale-110"
                       />
+                      {/* Quick View Button */}
+                      <button
+                        onClick={(e) => handleQuickView(garment, e)}
+                        className="absolute inset-0 flex items-center justify-center bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-300"
+                      >
+                        <span className="flex items-center gap-2 px-3 py-1.5 bg-background/90 rounded-full text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
+                          <Eye className="h-4 w-4" />
+                          Quick View
+                        </span>
+                      </button>
                     </div>
                     <h3 className="font-semibold text-foreground">{garment.label}</h3>
                     <p className="text-sm text-muted-foreground">From ${garment.price}</p>
-                  </button>
+                  </div>
                 ))}
               </div>
             </div>
@@ -193,6 +214,14 @@ const Products = () => {
       </main>
 
       <Footer />
+
+      <QuickViewModal
+        open={quickViewOpen}
+        onOpenChange={setQuickViewOpen}
+        garment={quickViewGarment}
+        color={selectedColorObj}
+        gender={selectedGender}
+      />
     </div>
   );
 };
