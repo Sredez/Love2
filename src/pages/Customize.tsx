@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ModelPreview from "@/components/ModelPreview";
+import FullscreenPreviewModal from "@/components/FullscreenPreviewModal";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -11,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Upload, Image, RotateCcw, ShoppingCart, Sparkles, ZoomIn, Move, RotateCw } from "lucide-react";
+import { Upload, Image, RotateCcw, ShoppingCart, Sparkles, ZoomIn, Move, RotateCw, Maximize2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { useCart } from "@/contexts/CartContext";
 
@@ -76,6 +77,7 @@ const Customize = () => {
   const [modelType, setModelType] = useState("caucasian-male");
   const [isDragging, setIsDragging] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [fullscreenPreviewOpen, setFullscreenPreviewOpen] = useState(false);
   
   // Design positioning controls
   const [designScale, setDesignScale] = useState(100);
@@ -130,7 +132,7 @@ const Customize = () => {
             {/* Preview Area */}
             <div className="space-y-6 animate-slide-up">
               {/* Live Model Preview */}
-              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-xl group">
                 <ModelPreview
                   garmentType={garmentType}
                   color={color}
@@ -144,6 +146,16 @@ const Customize = () => {
                   designOffsetY={designOffsetY}
                   designRotation={designRotation}
                 />
+                {/* Fullscreen button overlay */}
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg gap-2"
+                  onClick={() => setFullscreenPreviewOpen(true)}
+                >
+                  <Maximize2 className="h-4 w-4" />
+                  Fullscreen
+                </Button>
               </div>
 
               {/* Model Selection */}
@@ -512,6 +524,22 @@ const Customize = () => {
       </main>
 
       <Footer />
+
+      <FullscreenPreviewModal
+        open={fullscreenPreviewOpen}
+        onOpenChange={setFullscreenPreviewOpen}
+        garmentType={garmentType}
+        color={color}
+        colorHex={selectedColor?.hex || "#FFFFFF"}
+        size={size}
+        gender={gender}
+        modelType={modelType}
+        uploadedImage={uploadedImage}
+        designScale={designScale}
+        designOffsetX={designOffsetX}
+        designOffsetY={designOffsetY}
+        designRotation={designRotation}
+      />
     </div>
   );
 };
