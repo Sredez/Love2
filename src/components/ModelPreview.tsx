@@ -18,6 +18,10 @@ interface ModelPreviewProps {
   gender: string;
   modelType: string;
   uploadedImage: string | null;
+  designScale?: number;
+  designOffsetX?: number;
+  designOffsetY?: number;
+  designRotation?: number;
 }
 
 // Model images mapping
@@ -50,6 +54,10 @@ const ModelPreview = ({
   gender,
   modelType,
   uploadedImage,
+  designScale = 100,
+  designOffsetX = 0,
+  designOffsetY = 0,
+  designRotation = 0,
 }: ModelPreviewProps) => {
   const modelImage = modelImages[modelType] || modelImages["caucasian-male"];
   const printArea = printAreas[garmentType] || printAreas.tshirt;
@@ -100,10 +108,10 @@ const ModelPreview = ({
 
         {/* Print area with uploaded image or placeholder */}
         <div
-          className="absolute flex items-center justify-center overflow-hidden transition-all duration-300"
+          className="absolute flex items-center justify-center overflow-visible transition-all duration-300"
           style={{
-            top: `${adjustedPrintArea.top}%`,
-            left: `${adjustedPrintArea.left}%`,
+            top: `${adjustedPrintArea.top + designOffsetY}%`,
+            left: `${adjustedPrintArea.left + designOffsetX}%`,
             width: `${adjustedPrintArea.width}%`,
             height: `${adjustedPrintArea.height}%`,
           }}
@@ -112,10 +120,13 @@ const ModelPreview = ({
             <img
               src={uploadedImage}
               alt="Your design"
-              className="w-full h-full object-contain drop-shadow-lg"
+              className="object-contain drop-shadow-lg transition-transform duration-200"
               style={{
                 mixBlendMode: "multiply",
                 filter: color === "white" ? "none" : "brightness(1.1)",
+                transform: `scale(${designScale / 100}) rotate(${designRotation}deg)`,
+                width: "100%",
+                height: "100%",
               }}
             />
           ) : (
