@@ -1,4 +1,3 @@
-import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -30,7 +29,13 @@ const colorHexMap: Record<string, string> = {
 };
 
 const CartDrawer = () => {
-  const { items, totalItems, totalPrice, updateQuantity, removeFromCart, isLoading } = useCart();
+  // Placeholder cart data
+  const items: any[] = [];
+  const totalItems = 0;
+  const totalPrice = 0;
+  const updateQuantity = () => {};
+  const removeFromCart = () => {};
+  const isLoading = false;
   const navigate = useNavigate();
 
   return (
