@@ -16,6 +16,26 @@ import { Upload, Image, RotateCcw, ShoppingCart, Sparkles, ZoomIn, Move, RotateC
 import { Slider } from "@/components/ui/slider";
 import { useCart } from "@/contexts/CartContext";
 
+// Import model thumbnails
+import femaleAsianTshirt from "@/assets/models/female-asian-tshirt.jpg";
+import maleCaucasianTshirt from "@/assets/models/male-caucasian-tshirt.jpg";
+import femaleCaucasianTshirt from "@/assets/models/female-caucasian-tshirt.jpg";
+import maleAfricanTshirt from "@/assets/models/male-african-tshirt.jpg";
+import femaleAfricanTshirt from "@/assets/models/female-african-tshirt.jpg";
+import maleAsianTshirt from "@/assets/models/male-asian-tshirt.jpg";
+
+// Model thumbnails mapping
+const modelThumbnails: Record<string, string> = {
+  "caucasian-male": maleCaucasianTshirt,
+  "caucasian-female": femaleCaucasianTshirt,
+  "african-male": maleAfricanTshirt,
+  "african-female": femaleAfricanTshirt,
+  "asian-male": maleAsianTshirt,
+  "asian-female": femaleAsianTshirt,
+  "hispanic-male": maleCaucasianTshirt,
+  "hispanic-female": femaleCaucasianTshirt,
+};
+
 const garmentTypes = [
   { value: "tshirt", label: "T-Shirt" },
   { value: "hoodie", label: "Hoodie" },
@@ -161,52 +181,53 @@ const Customize = () => {
                 </Button>
               </div>
 
-              {/* Model Selection - Visual Buttons */}
+              {/* Model Selection - Visual Thumbnails */}
               <div className="bg-card rounded-xl p-6 shadow-md space-y-4">
                 <h3 className="font-semibold text-foreground">Choose Model</h3>
                 
-                {/* Model Gender Toggle */}
-                <div className="space-y-2">
-                  <label className="text-sm text-muted-foreground">Gender</label>
-                  <div className="flex gap-2">
-                    {modelGenders.map((g) => (
-                      <button
-                        key={g.value}
-                        onClick={() => setModelGender(g.value)}
-                        className={`flex-1 py-2.5 px-4 rounded-lg font-medium text-sm transition-all ${
-                          modelGender === g.value
-                            ? "bg-accent text-accent-foreground shadow-md"
-                            : "bg-muted text-muted-foreground hover:bg-muted/80"
-                        }`}
-                      >
-                        {g.label}
-                      </button>
-                    ))}
-                  </div>
+                {/* Model Grid with Thumbnails */}
+                <div className="grid grid-cols-4 gap-3">
+                  {modelEthnicities.map((ethnicity) => (
+                    modelGenders.map((gender) => {
+                      const key = `${ethnicity.value}-${gender.value}`;
+                      const isSelected = modelEthnicity === ethnicity.value && modelGender === gender.value;
+                      const thumbnail = modelThumbnails[key];
+                      
+                      return (
+                        <button
+                          key={key}
+                          onClick={() => {
+                            setModelEthnicity(ethnicity.value);
+                            setModelGender(gender.value);
+                          }}
+                          className={`relative group rounded-xl overflow-hidden transition-all ${
+                            isSelected
+                              ? "ring-2 ring-accent ring-offset-2 ring-offset-background shadow-lg scale-105"
+                              : "hover:ring-2 hover:ring-accent/50 hover:shadow-md"
+                          }`}
+                        >
+                          <div className="aspect-[3/4] overflow-hidden">
+                            <img
+                              src={thumbnail}
+                              alt={`${gender.label} ${ethnicity.label}`}
+                              className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-110"
+                            />
+                          </div>
+                          <div className={`absolute bottom-0 left-0 right-0 py-1.5 px-1 text-center text-xs font-medium transition-all ${
+                            isSelected
+                              ? "bg-accent text-accent-foreground"
+                              : "bg-background/80 backdrop-blur-sm text-foreground"
+                          }`}>
+                            {gender.label}
+                          </div>
+                        </button>
+                      );
+                    })
+                  )).flat()}
                 </div>
 
-                {/* Model Ethnicity Toggle */}
-                <div className="space-y-2">
-                  <label className="text-sm text-muted-foreground">Appearance</label>
-                  <div className="grid grid-cols-4 gap-2">
-                    {modelEthnicities.map((e) => (
-                      <button
-                        key={e.value}
-                        onClick={() => setModelEthnicity(e.value)}
-                        className={`py-2 px-3 rounded-lg font-medium text-xs transition-all ${
-                          modelEthnicity === e.value
-                            ? "bg-accent text-accent-foreground shadow-md"
-                            : "bg-muted text-muted-foreground hover:bg-muted/80"
-                        }`}
-                      >
-                        {e.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <p className="text-xs text-muted-foreground pt-2">
-                  Preview updates instantly as you select options.
+                <p className="text-xs text-muted-foreground text-center">
+                  Click a model to preview instantly
                 </p>
               </div>
             </div>
