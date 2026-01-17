@@ -41,7 +41,7 @@ const shirtMasks: Record<string, string> = {
   hoodie: "polygon(15% 26%, 38% 22%, 50% 20%, 62% 22%, 85% 26%, 92% 35%, 95% 55%, 90% 100%, 10% 100%, 5% 55%, 8% 35%)",
   polo: "polygon(20% 28%, 40% 25%, 50% 24%, 60% 25%, 80% 28%, 86% 35%, 90% 50%, 86% 100%, 14% 100%, 10% 50%, 14% 35%)",
   tank: "polygon(28% 26%, 42% 24%, 50% 23%, 58% 24%, 72% 26%, 78% 35%, 82% 50%, 78% 100%, 22% 100%, 18% 50%, 22% 35%)",
-  longsleeve: "polygon(5% 30%, 38% 24%, 50% 23%, 62% 24%, 95% 30%, 100% 40%, 100% 100%, 0% 100%, 0% 40%)",
+  longsleeve: "polygon(25% 28%, 40% 24%, 50% 23%, 60% 24%, 75% 28%, 80% 35%, 82% 50%, 80% 100%, 20% 100%, 18% 50%, 20% 35%)",
   sweatshirt: "polygon(10% 28%, 38% 22%, 50% 20%, 62% 22%, 90% 28%, 95% 38%, 95% 100%, 5% 100%, 5% 38%)",
 };
 
@@ -51,7 +51,7 @@ const printAreas: Record<string, { top: number; left: number; width: number; hei
   hoodie: { top: 38, left: 28, width: 44, height: 32 },
   polo: { top: 36, left: 30, width: 40, height: 28 },
   tank: { top: 34, left: 32, width: 36, height: 30 },
-  longsleeve: { top: 35, left: 30, width: 40, height: 30 },
+  longsleeve: { top: 36, left: 35, width: 30, height: 28 },
   sweatshirt: { top: 38, left: 28, width: 44, height: 32 },
 };
 
