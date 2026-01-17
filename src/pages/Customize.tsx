@@ -10,7 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Upload, Image, RotateCcw, ShoppingCart, Sparkles } from "lucide-react";
+import { Upload, Image, RotateCcw, ShoppingCart, Sparkles, ZoomIn, ZoomOut, Move, RotateCw } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 
 const garmentTypes = [
   { value: "tshirt", label: "T-Shirt" },
@@ -65,6 +66,12 @@ const Customize = () => {
   const [gender, setGender] = useState("unisex");
   const [modelType, setModelType] = useState("caucasian-male");
   const [isDragging, setIsDragging] = useState(false);
+  
+  // Design positioning controls
+  const [designScale, setDesignScale] = useState(100);
+  const [designOffsetX, setDesignOffsetX] = useState(0);
+  const [designOffsetY, setDesignOffsetY] = useState(0);
+  const [designRotation, setDesignRotation] = useState(0);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -120,6 +127,10 @@ const Customize = () => {
                   gender={gender}
                   modelType={modelType}
                   uploadedImage={uploadedImage}
+                  designScale={designScale}
+                  designOffsetX={designOffsetX}
+                  designOffsetY={designOffsetY}
+                  designRotation={designRotation}
                 />
               </div>
 
@@ -209,6 +220,114 @@ const Customize = () => {
                   )}
                 </div>
               </div>
+
+              {/* Design Position Controls - Only show when image is uploaded */}
+              {uploadedImage && (
+                <div className="bg-card rounded-xl p-6 shadow-md space-y-5 border border-border">
+                  <h3 className="font-semibold text-foreground flex items-center gap-2">
+                    <Move className="h-4 w-4" />
+                    Adjust Design Position
+                  </h3>
+                  
+                  {/* Scale */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                        <ZoomIn className="h-4 w-4 text-muted-foreground" />
+                        Size
+                      </label>
+                      <span className="text-sm text-muted-foreground">{designScale}%</span>
+                    </div>
+                    <Slider
+                      value={[designScale]}
+                      onValueChange={(value) => setDesignScale(value[0])}
+                      min={30}
+                      max={150}
+                      step={5}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Small</span>
+                      <span>Large</span>
+                    </div>
+                  </div>
+
+                  {/* Horizontal Position */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-foreground">Horizontal Position</label>
+                      <span className="text-sm text-muted-foreground">{designOffsetX > 0 ? `+${designOffsetX}` : designOffsetX}%</span>
+                    </div>
+                    <Slider
+                      value={[designOffsetX]}
+                      onValueChange={(value) => setDesignOffsetX(value[0])}
+                      min={-30}
+                      max={30}
+                      step={1}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>← Left</span>
+                      <span>Right →</span>
+                    </div>
+                  </div>
+
+                  {/* Vertical Position */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-foreground">Vertical Position</label>
+                      <span className="text-sm text-muted-foreground">{designOffsetY > 0 ? `+${designOffsetY}` : designOffsetY}%</span>
+                    </div>
+                    <Slider
+                      value={[designOffsetY]}
+                      onValueChange={(value) => setDesignOffsetY(value[0])}
+                      min={-20}
+                      max={20}
+                      step={1}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>↑ Up</span>
+                      <span>Down ↓</span>
+                    </div>
+                  </div>
+
+                  {/* Rotation */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                        <RotateCw className="h-4 w-4 text-muted-foreground" />
+                        Rotation
+                      </label>
+                      <span className="text-sm text-muted-foreground">{designRotation}°</span>
+                    </div>
+                    <Slider
+                      value={[designRotation]}
+                      onValueChange={(value) => setDesignRotation(value[0])}
+                      min={-180}
+                      max={180}
+                      step={5}
+                      className="w-full"
+                    />
+                  </div>
+
+                  {/* Reset Button */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => {
+                      setDesignScale(100);
+                      setDesignOffsetX(0);
+                      setDesignOffsetY(0);
+                      setDesignRotation(0);
+                    }}
+                  >
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Reset Position
+                  </Button>
+                </div>
+              )}
 
               {/* Use AI to Generate */}
               <div className="bg-accent/10 rounded-xl p-6 border border-accent/20">
