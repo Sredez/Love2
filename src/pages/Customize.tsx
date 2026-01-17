@@ -10,8 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Upload, Image, RotateCcw, ShoppingCart, Sparkles, ZoomIn, ZoomOut, Move, RotateCw } from "lucide-react";
+import { Upload, Image, RotateCcw, ShoppingCart, Sparkles, ZoomIn, Move, RotateCw } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { useCart } from "@/contexts/CartContext";
 
 const garmentTypes = [
   { value: "tshirt", label: "T-Shirt" },
@@ -66,12 +67,15 @@ const Customize = () => {
   const [gender, setGender] = useState("unisex");
   const [modelType, setModelType] = useState("caucasian-male");
   const [isDragging, setIsDragging] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   
   // Design positioning controls
   const [designScale, setDesignScale] = useState(100);
   const [designOffsetX, setDesignOffsetX] = useState(0);
   const [designOffsetY, setDesignOffsetY] = useState(0);
   const [designRotation, setDesignRotation] = useState(0);
+
+  const { addToCart } = useCart();
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -455,9 +459,40 @@ const Customize = () => {
                     <p className="text-sm font-medium text-accent">FREE over $50</p>
                   </div>
                 </div>
-                <Button variant="hero" size="xl" className="w-full">
-                  <ShoppingCart className="h-5 w-5 mr-2" />
-                  Add to Cart
+                <Button 
+                  variant="hero" 
+                  size="xl" 
+                  className="w-full"
+                  disabled={isAddingToCart}
+                  onClick={async () => {
+                    setIsAddingToCart(true);
+                    await addToCart({
+                      garment_type: garmentType,
+                      color,
+                      size,
+                      gender,
+                      design_image_url: uploadedImage,
+                      design_scale: designScale,
+                      design_offset_x: designOffsetX,
+                      design_offset_y: designOffsetY,
+                      design_rotation: designRotation,
+                      quantity: 1,
+                      price: 24.99,
+                    });
+                    setIsAddingToCart(false);
+                  }}
+                >
+                  {isAddingToCart ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-5 w-5 mr-2" />
+                      Add to Cart
+                    </>
+                  )}
                 </Button>
                 <p className="text-xs text-center text-muted-foreground">
                   Secure checkout • 30-day returns • Quality guaranteed
