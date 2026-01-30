@@ -112,6 +112,9 @@ const Customize = () => {
   const [designOffsetX, setDesignOffsetX] = useState(0);
   const [designOffsetY, setDesignOffsetY] = useState(0);
   const [designRotation, setDesignRotation] = useState(0);
+  
+  // Color threshold control for shadow-to-color transition
+  const [colorThreshold, setColorThreshold] = useState(210);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -171,6 +174,7 @@ const Customize = () => {
                   designOffsetX={designOffsetX}
                   designOffsetY={designOffsetY}
                   designRotation={designRotation}
+                  colorThreshold={colorThreshold}
                 />
                 {/* Fullscreen button overlay */}
                 <Button
@@ -518,6 +522,31 @@ const Customize = () => {
                       title={c.label}
                     />
                   ))}
+                </div>
+              </div>
+
+              {/* Color Threshold Control */}
+              <div className="bg-card rounded-xl p-6 shadow-md space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-foreground">Shadow to Color Transition</label>
+                    <span className="text-sm text-accent font-semibold">{colorThreshold}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Lower values = more shadows colored, Higher values = only bright areas colored
+                  </p>
+                  <Slider
+                    value={[colorThreshold]}
+                    onValueChange={(value) => setColorThreshold(value[0])}
+                    min={150}
+                    max={240}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>More Shadows</span>
+                    <span>Bright Only</span>
+                  </div>
                 </div>
               </div>
 

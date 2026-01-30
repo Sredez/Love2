@@ -20,6 +20,7 @@ interface ModelPreviewProps {
   designOffsetX?: number;
   designOffsetY?: number;
   designRotation?: number;
+  colorThreshold?: number;
 }
 
 // Model images mapping - using new full-body shots
@@ -67,6 +68,7 @@ const ModelPreview = ({
   designOffsetX = 0,
   designOffsetY = 0,
   designRotation = 0,
+  colorThreshold = 210,
 }: ModelPreviewProps) => {
   const modelImage = modelImages[modelType] || modelImages["caucasian-male"];
   const printArea = printAreas[garmentType] || printAreas.tshirt;
@@ -109,9 +111,8 @@ const ModelPreview = ({
           const b = data[i + 2];
           const a = data[i + 3];
 
-          // Check if pixel is white or very light (near white)
-          // Threshold at 210 to balance coloring white with preserving some shadows
-          if (r > 210 && g > 210 && b > 210 && a > 200) {
+          // Check if pixel meets the threshold for coloring
+          if (r > colorThreshold && g > colorThreshold && b > colorThreshold && a > 200) {
             data[i] = targetR;
             data[i + 1] = targetG;
             data[i + 2] = targetB;
@@ -126,10 +127,10 @@ const ModelPreview = ({
     img.src = imgSrc;
   };
 
-  // Recolor when color changes
+  // Recolor when color or threshold changes
   useEffect(() => {
     recolorWhitePixels(modelImage, color, colorHex);
-  }, [modelImage, color, colorHex]);
+  }, [modelImage, color, colorHex, colorThreshold]);
   
   // Calculate size adjustments for print area
   const sizeMultiplier = useMemo(() => {
