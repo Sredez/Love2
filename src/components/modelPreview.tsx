@@ -104,6 +104,9 @@ const ModelPreview = ({
           src={modelImage}
           alt="Model preview"
           className="w-full h-full object-cover object-top"
+          style={{
+            filter: color !== "white" ? `hue-rotate(0deg) saturate(1.2)` : "none"
+          }}
         />
         
         {/* Color overlay on the shirt - using clip-path for precise masking */}
@@ -112,9 +115,9 @@ const ModelPreview = ({
             className="absolute inset-0 pointer-events-none transition-colors duration-300 z-10"
             style={{
               backgroundColor: colorHex,
-              mixBlendMode: "overlay",
+              mixBlendMode: "color-dodge",
               clipPath: shirtMask,
-              opacity: 0.7,
+              opacity: 0.4,
             }}
           />
         )}
