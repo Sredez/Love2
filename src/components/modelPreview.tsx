@@ -109,12 +109,12 @@ const ModelPreview = ({
         {/* Color overlay on the shirt - using clip-path for precise masking */}
         {color !== "white" && (
           <div
-            className="absolute inset-0 pointer-events-none transition-colors duration-300 z-10"
+            className="absolute inset-0 pointer-events-none transition-all duration-200 z-10"
             style={{
               backgroundColor: colorHex,
-              mixBlendMode: "multiply",
+              mixBlendMode: "darken",
               clipPath: shirtMask,
-              opacity: 0.6,
+              opacity: 0.75,
             }}
           />
         )}
