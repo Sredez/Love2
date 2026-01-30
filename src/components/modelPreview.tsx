@@ -109,7 +109,7 @@ const ModelPreview = ({
         {/* Color overlay on the shirt - using clip-path for precise masking */}
         {color !== "white" && (
           <div
-            className="absolute inset-0 pointer-events-none transition-colors duration-300"
+            className="absolute inset-0 pointer-events-none transition-colors duration-300 z-10"
             style={{
               backgroundColor: colorHex,
               mixBlendMode: "multiply",
@@ -119,9 +119,9 @@ const ModelPreview = ({
           />
         )}
 
-        {/* Print area with uploaded image or placeholder */}
+        {/* Print area with uploaded image or placeholder - z-20 to appear on top */}
         <div
-          className="absolute flex items-center justify-center overflow-visible transition-all duration-300"
+          className="absolute flex items-center justify-center overflow-visible transition-all duration-300 z-20"
           style={{
             top: `${adjustedPrintArea.top + designOffsetY}%`,
             left: `${adjustedPrintArea.left + designOffsetX}%`,
@@ -135,7 +135,7 @@ const ModelPreview = ({
               alt="Your design"
               className="object-contain drop-shadow-lg transition-transform duration-200"
               style={{
-                mixBlendMode: "multiply",
+                mixBlendMode: "screen",
                 filter: color === "white" ? "none" : "brightness(1.1)",
                 transform: `scale(${designScale / 100}) rotate(${designRotation}deg)`,
                 width: "100%",
