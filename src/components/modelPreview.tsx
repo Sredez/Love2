@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useRef, useEffect, useState } from "react";
 
 // Import model images (full body with visible t-shirt)
 import femaleAsianTshirt from "@/assets/models/female-asian-tshirt.jpg";
@@ -71,6 +71,65 @@ const ModelPreview = ({
   const modelImage = modelImages[modelType] || modelImages["caucasian-male"];
   const printArea = printAreas[garmentType] || printAreas.tshirt;
   const shirtMask = shirtMasks[garmentType] || shirtMasks.tshirt;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [coloredImageUrl, setColoredImageUrl] = useState<string>("");
+
+  // Function to recolor white pixels to chosen color
+  const recolorWhitePixels = (imgSrc: string, targetColor: string, targetHex: string) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      // Draw original image
+      ctx.drawImage(img, 0, 0);
+
+      // Get image data
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+
+      // Parse target color RGB
+      const rgb = parseInt(targetHex.slice(1), 16);
+      const targetR = (rgb >> 16) & 255;
+      const targetG = (rgb >> 8) & 255;
+      const targetB = rgb & 255;
+
+      // Only recolor if not white (white means keep original)
+      if (targetColor !== "white") {
+        // Scan through pixels and recolor white ones
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const a = data[i + 3];
+
+          // Check if pixel is white or very light (near white)
+          // Threshold of 240 to catch off-white pixels too
+          if (r > 240 && g > 240 && b > 240 && a > 200) {
+            data[i] = targetR;
+            data[i + 1] = targetG;
+            data[i + 2] = targetB;
+            // Keep original alpha
+          }
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      setColoredImageUrl(canvas.toDataURL());
+    };
+    img.src = imgSrc;
+  };
+
+  // Recolor when color changes
+  useEffect(() => {
+    recolorWhitePixels(modelImage, color, colorHex);
+  }, [modelImage, color, colorHex]);
   
   // Calculate size adjustments for print area
   const sizeMultiplier = useMemo(() => {
@@ -98,26 +157,16 @@ const ModelPreview = ({
 
   return (
     <div className="relative w-full h-full bg-gradient-to-b from-muted/30 to-muted/50 rounded-2xl overflow-hidden">
-      {/* Model Image with color filter applied */}
+      {/* Hidden canvas for pixel recoloring */}
+      <canvas ref={canvasRef} className="hidden" />
+      
+      {/* Model Image with recolored white pixels */}
       <div className="relative w-full h-full">
         <img
-          src={modelImage}
+          src={coloredImageUrl || modelImage}
           alt="Model preview"
           className="w-full h-full object-cover object-top relative z-0"
         />
-
-        {/* Color overlay - only colors the shirt area using clip-path mask */}
-        {color !== "white" && (
-          <div
-            className="absolute top-0 left-0 w-full h-full z-5 pointer-events-none"
-            style={{
-              backgroundColor: colorHex || "#000",
-              opacity: 0.5,
-              mixBlendMode: "multiply",
-              clipPath: shirtMask,
-            }}
-          />
-        )}
 
         {/* Print area with uploaded image or placeholder - z-20 to appear on top */}
         <div
