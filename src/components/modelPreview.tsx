@@ -100,16 +100,10 @@ const ModelPreview = ({
     <div className="relative w-full h-full bg-gradient-to-b from-muted/30 to-muted/50 rounded-2xl overflow-hidden">
       {/* Model Image */}
       <div className="relative w-full h-full">
-        <img
-          src={modelImage}
-          alt="Model preview"
-          className="w-full h-full object-cover object-top"
-        />
-        
-        {/* Color overlay on the shirt - using clip-path for precise masking */}
+        {/* Color overlay on the shirt - BEFORE model image */}
         {color !== "white" && (
           <div
-            className="absolute inset-0 pointer-events-none transition-all duration-200 z-10"
+            className="absolute inset-0 pointer-events-none transition-all duration-200 z-0"
             style={{
               backgroundColor: colorHex,
               mixBlendMode: "darken",
@@ -118,6 +112,13 @@ const ModelPreview = ({
             }}
           />
         )}
+
+        {/* Base model image - z-5 */}
+        <img
+          src={modelImage}
+          alt="Model preview"
+          className="w-full h-full object-cover object-top relative z-5"
+        />
 
         {/* Print area with uploaded image or placeholder - z-20 to appear on top */}
         <div
@@ -135,7 +136,7 @@ const ModelPreview = ({
               alt="Your design"
               className="object-contain drop-shadow-lg transition-transform duration-200"
               style={{
-                mixBlendMode: "screen",
+                mixBlendMode: "normal",
                 filter: color === "white" ? "none" : "brightness(1.1)",
                 transform: `scale(${designScale / 100}) rotate(${designRotation}deg)`,
                 width: "100%",
