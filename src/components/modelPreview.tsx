@@ -110,8 +110,8 @@ const ModelPreview = ({
           const a = data[i + 3];
 
           // Check if pixel is white or very light (near white)
-          // Threshold at 230 to color bright white but preserve shadow details
-          if (r > 230 && g > 230 && b > 230 && a > 200) {
+          // Threshold at 210 to balance coloring white with preserving some shadows
+          if (r > 210 && g > 210 && b > 210 && a > 200) {
             data[i] = targetR;
             data[i + 1] = targetG;
             data[i + 2] = targetB;
