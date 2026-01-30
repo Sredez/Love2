@@ -104,7 +104,7 @@ const ModelPreview = ({
       navy: 240,
       gray: 0,
       red: 0,
-      forest: 100,
+      forest: 120,
     };
     return hueMap[colorName] || 0;
   };
@@ -119,7 +119,7 @@ const ModelPreview = ({
           className="w-full h-full object-cover object-top relative z-5"
           style={{
             filter: color !== "white" 
-              ? `sepia(0.5) saturate(2) hue-rotate(${getHueRotation(color)}deg)` 
+              ? `sepia(0.8) saturate(1.5) hue-rotate(${getHueRotation(color)}deg) brightness(0.95)` 
               : "none",
           }}
         />
