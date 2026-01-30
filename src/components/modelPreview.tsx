@@ -93,11 +93,59 @@ const ModelPreview = ({
     height: printArea.height * sizeMultiplier,
   }), [printArea, sizeMultiplier]);
 
+  // Convert hex color to RGB for filtering
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : { r: 255, g: 255, b: 255 };
+  };
+
+  const rgb = hexToRgb(colorHex);
+  
+  // Generate a CSS filter that tints the white areas
+  // Using sepia, saturate, and hue-rotate to shift colors
+  const getColorFilter = () => {
+    if (color === "white") return "none";
+    
+    // Calculate hue rotation based on the target color
+    const hueMap: Record<string, number> = {
+      black: 0,
+      navy: 210,
+      gray: 0,
+      red: 0,
+      forest: 120,
+    };
+    
+    return `saturate(1.5) brightness(1.1)`;
+  };
+
   // Determine text color based on shirt color
   const textColor = ["white", "gray"].includes(color) ? "#333" : "#fff";
 
   return (
     <div className="relative w-full h-full bg-gradient-to-b from-muted/30 to-muted/50 rounded-2xl overflow-hidden">
+      {/* SVG filter for color replacement - targets white pixels */}
+      <svg width="0" height="0">
+        <defs>
+          <filter id={`colorReplace-${color}`}>
+            {color !== "white" && (
+              <>
+                <feColorMatrix
+                  type="matrix"
+                  values={`0 0 0 0 ${rgb.r/255}
+                           0 0 0 0 ${rgb.g/255}
+                           0 0 0 0 ${rgb.b/255}
+                           0 0 0 1 0`}
+                />
+              </>
+            )}
+          </filter>
+        </defs>
+      </svg>
+
       {/* Model Image */}
       <div className="relative w-full h-full">
         <img
@@ -105,7 +153,7 @@ const ModelPreview = ({
           alt="Model preview"
           className="w-full h-full object-cover object-top"
           style={{
-            filter: color !== "white" ? `hue-rotate(0deg) saturate(1.2)` : "none"
+            filter: color !== "white" ? `url(#colorReplace-${color})` : "none"
           }}
         />
         
@@ -115,9 +163,9 @@ const ModelPreview = ({
             className="absolute inset-0 pointer-events-none transition-colors duration-300 z-10"
             style={{
               backgroundColor: colorHex,
-              mixBlendMode: "color-dodge",
+              mixBlendMode: "lighten",
               clipPath: shirtMask,
-              opacity: 0.4,
+              opacity: 0.3,
             }}
           />
         )}
