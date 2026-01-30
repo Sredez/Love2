@@ -112,9 +112,9 @@ const ModelPreview = ({
             className="absolute inset-0 pointer-events-none transition-colors duration-300 z-10"
             style={{
               backgroundColor: colorHex,
-              mixBlendMode: "multiply",
+              mixBlendMode: "overlay",
               clipPath: shirtMask,
-              opacity: 0.85,
+              opacity: 0.7,
             }}
           />
         )}
