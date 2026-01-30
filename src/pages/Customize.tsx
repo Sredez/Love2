@@ -48,9 +48,15 @@ const colors = [
   { value: "white", label: "White", hex: "#FFFFFF" },
   { value: "black", label: "Black", hex: "#1a1a1a" },
   { value: "navy", label: "Navy", hex: "#1e3a5f" },
+  { value: "darkgray", label: "Dark Gray", hex: "#374151" },
+  { value: "charcoal", label: "Charcoal", hex: "#2d3748" },
   { value: "gray", label: "Gray", hex: "#6b7280" },
   { value: "red", label: "Red", hex: "#dc2626" },
+  { value: "darkred", label: "Dark Red", hex: "#7f1d1d" },
+  { value: "maroon", label: "Maroon", hex: "#4c0519" },
   { value: "forest", label: "Forest Green", hex: "#166534" },
+  { value: "darkgreen", label: "Dark Green", hex: "#1b4332" },
+  { value: "darkblue", label: "Dark Blue", hex: "#1e40af" },
 ];
 
 const sizes = [

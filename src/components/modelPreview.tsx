@@ -110,8 +110,8 @@ const ModelPreview = ({
           const a = data[i + 3];
 
           // Check if pixel is white or very light (near white)
-          // Threshold of 240 to catch off-white pixels too
-          if (r > 240 && g > 240 && b > 240 && a > 200) {
+          // Lowered threshold to 220 to catch shadowed/gray areas on white shirt
+          if (r > 220 && g > 220 && b > 220 && a > 200) {
             data[i] = targetR;
             data[i + 1] = targetG;
             data[i + 2] = targetB;
