@@ -96,28 +96,32 @@ const ModelPreview = ({
   // Determine text color based on shirt color
   const textColor = ["white", "gray"].includes(color) ? "#333" : "#fff";
 
+  // Helper function to get hue rotation based on color
+  const getHueRotation = (colorName: string): number => {
+    const hueMap: Record<string, number> = {
+      white: 0,
+      black: 0,
+      navy: 240,
+      gray: 0,
+      red: 0,
+      forest: 100,
+    };
+    return hueMap[colorName] || 0;
+  };
+
   return (
     <div className="relative w-full h-full bg-gradient-to-b from-muted/30 to-muted/50 rounded-2xl overflow-hidden">
-      {/* Model Image */}
+      {/* Model Image with color filter applied */}
       <div className="relative w-full h-full">
-        {/* Color overlay on the shirt - BEFORE model image */}
-        {(
-          <div
-            className="absolute inset-0 pointer-events-none transition-all duration-200 z-0"
-            style={{
-              backgroundColor: colorHex,
-              mixBlendMode: "lighten",
-              clipPath: shirtMask,
-              opacity: color === "white" ? 0 : 1,
-            }}
-          />
-        )}
-
-        {/* Base model image - z-5 */}
         <img
           src={modelImage}
           alt="Model preview"
           className="w-full h-full object-cover object-top relative z-5"
+          style={{
+            filter: color !== "white" 
+              ? `sepia(0.5) saturate(2) hue-rotate(${getHueRotation(color)}deg)` 
+              : "none",
+          }}
         />
 
         {/* Print area with uploaded image or placeholder - z-20 to appear on top */}
