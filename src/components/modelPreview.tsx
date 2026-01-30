@@ -101,14 +101,14 @@ const ModelPreview = ({
       {/* Model Image */}
       <div className="relative w-full h-full">
         {/* Color overlay on the shirt - BEFORE model image */}
-        {color !== "white" && (
+        {(
           <div
             className="absolute inset-0 pointer-events-none transition-all duration-200 z-0"
             style={{
               backgroundColor: colorHex,
               mixBlendMode: "darken",
               clipPath: shirtMask,
-              opacity: 0.75,
+              opacity: color === "white" ? 0 : 0.75,
             }}
           />
         )}
